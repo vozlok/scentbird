@@ -3,3 +3,8 @@
 
 ## Playwright tests for the Gift subscription page
 /tests/gift.spec.ts
+
+### How to run
+```bash
+npm run test:e2e
+```
