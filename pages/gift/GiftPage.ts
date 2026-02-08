@@ -1,6 +1,12 @@
 
 import { Locator, Page } from '@playwright/test';
 
+export enum GiftMonths {
+    THREE = 3,
+    SIX = 6,
+    TWELVE = 12
+}
+
 export class GiftPage {
 	readonly page: Page;
 	readonly gift3Month: Locator;
@@ -18,11 +24,11 @@ export class GiftPage {
 		await this.page.goto('/gift');
 	}
 
-	async selectGiftSubscription(months: number) {
+	async selectGiftSubscription(months: GiftMonths) {
         switch (months) {
-            case 3: await this.gift3Month.click(); break;
-            case 6: await this.gift6Month.click(); break;
-            case 12: await this.gift12Month.click(); break;
+            case GiftMonths.THREE: await this.gift3Month.click(); break;
+            case GiftMonths.SIX: await this.gift6Month.click(); break;
+            case GiftMonths.TWELVE: await this.gift12Month.click(); break;
             default: throw new Error(`Unsupported gift subscription duration: ${months} months`);
         }
     }       

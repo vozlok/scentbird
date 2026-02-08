@@ -71,15 +71,15 @@ export class GiftMonthPage {
         await this.recipientName.fill(name);
     }
 
-    async fillRecipientEmail(email: string) {
+    private async fillRecipientEmail(email: string) {
         await this.recipientEmail.fill(email);
     }
 
-    async fillRecipientMessage(message: string) {
+    private async fillRecipientMessage(message: string) {
         await this.recipientMessage.fill(message);
     }
 
-    async selectRecipientGender(recipientGenderOption: string) {
+    private async selectRecipientGender(recipientGenderOption: string) {
         switch (recipientGenderOption) {
         case 'Cologne':
             await this.recipientGenderOptionMale.click();
@@ -88,7 +88,7 @@ export class GiftMonthPage {
             await this.recipientGenderOptionFemale.click();
             break;
         default:                
-            throw new Error(`Unsupported gender option: ${recipientGenderOption}`);
+            throw new Error(`Unsupported recipient gender: ${recipientGenderOption}`);
         }
     }
 
@@ -96,20 +96,20 @@ export class GiftMonthPage {
         await this.senderName.fill(name);
     }
 
-    async selectSendDateOptionNow() {
+    private async selectSendDateOptionNow() {
         await this.sendDateOptionNow.click();
     }
 
-    async selectSendDateOptionLater() {
+    private async selectSendDateOptionLater() {
         await this.sendDateOptionLater.click();
     }
 
-    async setDateToSendGiftWithOffset(offsetDays: number) {
+    private async setDateToSendGiftWithOffset(offsetDays: number) {
         await this.selectSendDateOptionLater();
         const futureDate = getDateWithOffset(offsetDays);
         const [month, day, year] = futureDate.split('-');
-        await this.dateMonth.selectOption(String(parseInt(month)));
-        await this.dateDay.selectOption(String(parseInt(day)));
+        await this.dateMonth.selectOption(month);
+        await this.dateDay.selectOption(day);
         await this.dateYear.selectOption(year);
     }
 
@@ -133,37 +133,37 @@ export class GiftMonthPage {
         await this.payForYourOrderButton.click();
     }
 
-    async verifyPriceInfo() {
+    async checkPriceInfo() {
         await expect(this.priceInfo).toBeVisible();
     }
 
-    async verifyGiftSixMonthRedirectUrl() {
+    async checkGiftSixMonthRedirectUrl() {
         await this.page.waitForURL('**/gift?months=6');
     }
 
-    async checkRecipientNameError(textError: string) {
+    async checkRecipientNameError(errorText: string) {
         await expect(this.recipientNameError).toBeVisible();
-        await expect(this.recipientNameError).toContainText(textError);
+        await expect(this.recipientNameError).toContainText(errorText);
     }
 
-    async checkRecipientEmailError(textError: string) {
+    async checkRecipientEmailError(errorText: string) {
         await expect(this.recipientEmailError).toBeVisible();
-        await expect(this.recipientEmailError).toContainText(textError);
+        await expect(this.recipientEmailError).toContainText(errorText);
     }
 
-    async verifyInvalidRecipientEmails(textError: string) {
+    async verifyInvalidRecipientEmails(errorText: string) {
         const invalidEmails = ['testgmail.com', '@no-domain', 'user@', 'test@domain'];
 
         for (const email of invalidEmails) {
             await this.fillRecipientEmail(email);
             await expect(this.recipientEmail).toHaveValue(email);
             await this.clickPayForYourOrder();
-            await this.checkRecipientEmailError(textError);
+            await this.checkRecipientEmailError(errorText);
         }
     }
     
-    async checkDateError(textError: string) {
+    async checkDateError(errorText: string) {
         await expect(this.dateError).toBeVisible();
-        await expect(this.dateError).toContainText(textError);
+        await expect(this.dateError).toContainText(errorText);
     }
 }

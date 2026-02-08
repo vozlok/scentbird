@@ -11,7 +11,7 @@ export class GiftMonthCartModalPage {
         this.checkoutButton = page.locator('[data-testid="modalPrimaryButton"]');
     }
 
-    async clickCheckout() {
+    private async clickCheckout() {
         await this.checkoutButton.click();
     }
 

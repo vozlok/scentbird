@@ -1,14 +1,14 @@
 import { test } from './fixtures/giftFixtures';
 import { randUser, randLine } from '@ngneat/falso';
 import { GiftMonthCartModalPage } from '../pages/gift/GiftMonthCartModalPage';
-import { GiftPage } from '../pages/gift/GiftPage';
+import { GiftPage, GiftMonths } from '../pages/gift/GiftPage';
 import { GiftMonthPage } from '../pages/gift/GiftMonthPage';
 
 test('1.1 guest flow using email address', async ({ gift6MonthPage }) => {
     const user = randUser();
     const message = randLine();
     
-    await gift6MonthPage.verifyPriceInfo();
+    await gift6MonthPage.checkPriceInfo();
     await gift6MonthPage.fillEmailRecipientForm({
         recipientName: `${user.firstName} ${user.lastName}`,
         recipientEmail: user.email,
@@ -26,7 +26,7 @@ test('1.1 guest flow using email address', async ({ gift6MonthPage }) => {
 test('1.1 guest flow using email address, required fields only ', async ({ gift6MonthPage }) => {
     const user = randUser();
     
-    await gift6MonthPage.verifyPriceInfo();
+    await gift6MonthPage.checkPriceInfo();
     await gift6MonthPage.fillEmailRecipientForm({
         recipientName: `${user.firstName} ${user.lastName}`,
         recipientEmail: user.email,
@@ -40,12 +40,8 @@ test('1.1 guest flow using email address, required fields only ', async ({ gift6
 });
 
 test('1.4 guest flow using share link', async ({ gift6MonthPage }) => {
-    await gift6MonthPage.verifyPriceInfo();
-    await gift6MonthPage.fillEmailRecipientForm({
-        recipientName: randUser().firstName,
-        recipientEmail: randUser().email,
-        sendNow: true,
-    });
+    await gift6MonthPage.selectLinkSharingMethod();
+    await gift6MonthPage.fillSenderName(randUser().firstName);
     await gift6MonthPage.clickPayForYourOrder();
 
     const giftCartModalPage = new GiftMonthCartModalPage(gift6MonthPage.page);
@@ -55,11 +51,11 @@ test('1.4 guest flow using share link', async ({ gift6MonthPage }) => {
 test('check correct redirect after choosing 6 month gift subscription on the /gift page', async ({ page }) => {
     const giftPage = new GiftPage(page);
     await giftPage.open();
-    await giftPage.selectGiftSubscription(6);
+    await giftPage.selectGiftSubscription(GiftMonths.SIX);
 
     const giftMonthPage = new GiftMonthPage(giftPage.page);
-    await giftMonthPage.verifyPriceInfo();
-    await giftMonthPage.verifyGiftSixMonthRedirectUrl();
+    await giftMonthPage.checkPriceInfo();
+    await giftMonthPage.checkGiftSixMonthRedirectUrl();
 });
 
 test('1.3 form validation - required fields', async ({ gift6MonthPage }) => {
@@ -84,7 +80,7 @@ test('1.1 guest flow using email address - pick invalid date', async ({ gift6Mon
     const user = randUser();
     const message = randLine();
     
-    await gift6MonthPage.verifyPriceInfo();
+    await gift6MonthPage.checkPriceInfo();
     await gift6MonthPage.fillEmailRecipientForm({
         recipientName: `${user.firstName} ${user.lastName}`,
         recipientEmail: user.email,

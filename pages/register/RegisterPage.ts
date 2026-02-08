@@ -16,23 +16,23 @@ export class RegisterPage {
         await this.page.goto('/register');
     }
 
-    async verifyGiftRedirectUrl() {
+    private async checkGiftRedirectUrl() {
         await expect(this.page).toHaveURL(/\/register\?redirect=%2Fsubscription%2Fpayment/);
     }
     
-    async verifyTextH1() {
+    private async checkTextH1() {
         await expect(this.textH1).toBeVisible();
         await expect(this.textH1).toHaveText('Create your account');
     }
     
-    async checkSignUpButton() {
+    private async checkSignUpButton() {
         await expect(this.signUpButton).toBeVisible();
         await expect(this.signUpButton).toBeEnabled();
     }
 
     async assertOnRegisterPage() {
-        await this.verifyGiftRedirectUrl();
-        await this.verifyTextH1();
+        await this.checkGiftRedirectUrl();
+        await this.checkTextH1();
         await this.checkSignUpButton();
     }
 
